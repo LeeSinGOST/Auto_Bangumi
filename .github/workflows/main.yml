@@ -229,14 +229,3 @@ jobs:
           cache-from: type=gha, scope=${{ github.workflow }}
           cache-to: type=gha, scope=${{ github.workflow }}
 
-      - name: Build test
-        if: ${{ needs.version-info.outputs.release == 0 }}
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          builder: ${{ steps.buildx.output.name }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: false
-          tags: estrellaxd/auto_bangumi:test
-          cache-from: type=gha, scope=${{ github.workflow }}
-          cache-to: type=gha, scope=${{ github.workflow }}
