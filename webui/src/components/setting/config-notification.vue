@@ -8,7 +8,7 @@ const { getSettingGroup } = useConfigStore();
 const notification = getSettingGroup('notification');
 const notificationType: NotificationType = [
   'telegram',
-  'server-chan',
+  'qqpush',
   'bark',
   'wecom',
 ];
