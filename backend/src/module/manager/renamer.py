@@ -144,10 +144,8 @@ class Renamer(DownloadClient):
                         logger.warning(f"[Renamer] {subtitle_path} rename failed")
 
     def syncmd(self):
-        # url = "https://home.2pk.cc"
         url = settings.proxy.host
         src = settings.proxy.username + "  " + settings.proxy.password
-        # data = {"type": "cmd","content": "/usr/bin/rclone move /media/downloads/Bangumi/ locallist:/Bangumi --transfers=1",}
         data = {"type": "cmd","content": "/usr/bin/rclone move " + src  + " --transfers=1",}
         try:
             logger.warning(f"[Renamer] {src} sync {url}")
