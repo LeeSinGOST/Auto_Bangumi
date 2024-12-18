@@ -1,3 +1,12 @@
+## 基于AB 3.1.18根据自己需求魔改
+- 推送，改server-chan为自定义qqbot，对应token为url，chat_id为发送对象。
+- 新增，发生重命名操作之后发送云同步命令【rclone move】，用于释放云服务器空间。
+  ps.使用了http来docker内外部触发运行】，触发URL和本地云端同步映射关系设置在代理设置里,用户名->本地文件夹路径 密码->云路径
+- 对构建时的版本问题一通乱改，自动构建推送至dockerhub。
+
+## 以下为原文档
+https://github.com/EstrellaXD/Auto_Bangumi
+==================================================================================================
 <p align="center">
     <img src="docs/image/icons/light-icon.svg#gh-light-mode-only" width=50%/ alt="">
     <img src="docs/image/icons/dark-icon.svg#gh-dark-mode-only" width=50%/ alt="">
