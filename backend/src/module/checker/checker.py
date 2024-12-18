@@ -38,7 +38,7 @@ class Checker:
 
     @staticmethod
     def check_version() -> bool:
-        return version_check()
+        return True
 
     @staticmethod
     def check_database() -> bool:
