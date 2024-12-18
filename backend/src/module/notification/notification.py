@@ -25,7 +25,7 @@ def getClient(type: str):
     elif type.lower() == "wecom":
         return WecomNotification
     elif type.lower() == "server-chan":
-        return ServerChanNotification
+        return QQpushNotification
     else:
         return None
 
