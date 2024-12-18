@@ -1,5 +1,7 @@
 import logging
 import re
+import requests
+import json
 
 from module.conf import settings
 from module.downloader import DownloadClient
@@ -10,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 class Renamer(DownloadClient):
+    
+    checktest = False
+
     def __init__(self):
         super().__init__()
         self._parser = TitleParser()
@@ -58,6 +63,7 @@ class Renamer(DownloadClient):
             _hash: str,
             **kwargs,
     ):
+        global checktest
         ep = self._parser.torrent_parser(
             torrent_name=torrent_name,
             torrent_path=media_path,
@@ -70,6 +76,7 @@ class Renamer(DownloadClient):
                     if self.rename_torrent_file(
                         _hash=_hash, old_path=media_path, new_path=new_path
                     ):
+                        checktest = True
                         return Notification(
                             official_title=bangumi_name,
                             season=ep.season,
@@ -136,7 +143,21 @@ class Renamer(DownloadClient):
                     if not renamed:
                         logger.warning(f"[Renamer] {subtitle_path} rename failed")
 
+    def syncmd(self):
+        # url = "https://home.2pk.cc"
+        url = settings.proxy.host
+        src = settings.proxy.username + "  " + settings.proxy.password
+        # data = {"type": "cmd","content": "/usr/bin/rclone move /media/downloads/Bangumi/ locallist:/Bangumi --transfers=1",}
+        data = {"type": "cmd","content": "/usr/bin/rclone move " + src  + " --transfers=1",}
+        try:
+            logger.warning(f"[Renamer] {src} sync {url}")
+            response = requests.post(url, json=data, timeout=0.1, headers={"Content-Type": "application/json"})
+        except:
+            logger.debug("[Renamer] Syncing")
+
     def rename(self) -> list[Notification]:
+        global checktest
+        checktest = False
         # Get torrent info
         logger.debug("[Renamer] Start rename process.")
         rename_method = settings.bangumi_manage.rename_method
@@ -169,7 +190,11 @@ class Renamer(DownloadClient):
                 self.set_category(info.hash, "BangumiCollection")
             else:
                 logger.warning(f"[Renamer] {info.name} has no media file")
-        logger.debug("[Renamer] Rename process finished.")
+        if checktest:
+            checktest = False
+            self.syncmd()
+        else:
+            logger.debug("[Renamer] Rename process noch finished.")
         return renamed_info
 
     def compare_ep_version(self, torrent_name: str, torrent_hash: str):

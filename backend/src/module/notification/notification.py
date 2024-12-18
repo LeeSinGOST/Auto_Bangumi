@@ -7,6 +7,7 @@ from module.models import Notification
 from .plugin import (
     BarkNotification,
     ServerChanNotification,
+    QQpushNotification,
     TelegramNotification,
     WecomNotification,
 )
@@ -17,12 +18,14 @@ logger = logging.getLogger(__name__)
 def getClient(type: str):
     if type.lower() == "telegram":
         return TelegramNotification
-    elif type.lower() == "server-chan":
-        return ServerChanNotification
+    elif type.lower() == "qqpush":
+        return QQpushNotification
     elif type.lower() == "bark":
         return BarkNotification
     elif type.lower() == "wecom":
         return WecomNotification
+    elif type.lower() == "server-chan":
+        return ServerChanNotification
     else:
         return None
 

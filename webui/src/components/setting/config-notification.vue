@@ -11,6 +11,7 @@ const notificationType: NotificationType = [
   'server-chan',
   'bark',
   'wecom',
+  'qqpush',
 ];
 
 const items: SettingItem<Notification>[] = [
