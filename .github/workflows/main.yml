@@ -184,7 +184,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            kokutou/auto_bangumi
+            ${{ secrets.USERNAME }}/auto_bangumi
           tags: |
             type=raw,value=${{ needs.version-info.outputs.version }}
             type=raw,value=latest
