@@ -192,7 +192,6 @@ jobs:
 
 
       - name: Login to DockerHub
-        if: ${{ needs.version-info.outputs.release == 1 }}
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.USERNAME }}
@@ -206,7 +205,6 @@ jobs:
           path: backend/src/dist
 
       - name: Build and push
-        if: ${{ needs.version-info.outputs.release == 1 && needs.version-info.outputs.dev != 1 }}
         uses: docker/build-push-action@v4
         with:
           context: .
