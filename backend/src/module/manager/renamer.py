@@ -145,8 +145,9 @@ class Renamer(DownloadClient):
 
     def syncmd(self):
         url = settings.proxy.host
-        src = settings.proxy.username + "  " + settings.proxy.password
-        data = {"type": "cmd","content": "/usr/bin/rclone move " + src  + " --transfers=1",}
+        # src = settings.proxy.username + "  " + settings.proxy.password
+        src = settings.proxy.username
+        data = {"type": "cmd","content":  src,}
         try:
             logger.warning(f"[Renamer] {src} sync {url}")
             response = requests.post(url, json=data, timeout=0.1, headers={"Content-Type": "application/json"})
