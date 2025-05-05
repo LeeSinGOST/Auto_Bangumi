@@ -25,9 +25,20 @@ class RequestContent(RequestURL):
             torrents: list[Torrent] = []
             if _filter is None:
                 _filter = "|".join(settings.rss_parser.filter)
+            
+            # 过滤掉无效的种子链接
+            valid_items = []
             for _title, torrent_url, homepage in zip(
                 torrent_titles, torrent_urls, torrent_homepage
             ):
+                # 检查种子链接是否有效
+                if self.check_torrent_url(torrent_url):
+                    valid_items.append((_title, torrent_url, homepage))
+                else:
+                    logger.warning(f"[Network] Invalid torrent URL skipped: {torrent_url}")
+            
+            # 处理有效的种子链接
+            for _title, torrent_url, homepage in valid_items:
                 if re.search(_filter, _title) is None:
                     torrents.append(
                         Torrent(name=_title, url=torrent_url, homepage=homepage)
@@ -39,6 +50,11 @@ class RequestContent(RequestURL):
         else:
             logger.warning(f"[Network] Failed to get torrents: {_url}")
             return []
+    
+    def check_torrent_url(self, url: str) -> bool:
+        """检查种子链接是否有效"""
+        req = self.get_url(url, retry=1, check_status=True)
+        return req is not None
 
     def get_xml(self, _url, retry: int = 3) -> xml.etree.ElementTree.Element:
         req = self.get_url(_url, retry)

@@ -15,12 +15,18 @@ class RequestURL:
         self.header = {"user-agent": "Mozilla/5.0", "Accept": "application/xml"}
         self._socks5_proxy = False
 
-    def get_url(self, url, retry=3):
+    def get_url(self, url, retry=3, check_status=False):
         try_time = 0
         while True:
             try:
                 req = self.session.get(url=url, headers=self.header, timeout=5)
                 logger.debug(f"[Network] Successfully connected to {url}. Status: {req.status_code}")
+                
+                # 如果是检查状态模式，对404等错误状态码直接返回None
+                if check_status and req.status_code >= 400:
+                    logger.warning(f"[Network] Invalid URL (Status {req.status_code}): {url}")
+                    return None
+                
                 req.raise_for_status()
                 return req
             except requests.RequestException:
